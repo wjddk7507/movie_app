@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import Movie from "./Movie";
+import "./App.css";
 
 class App extends React.Component {
   state = {
@@ -10,7 +11,7 @@ class App extends React.Component {
   //getMovies가 오래걸리므로 async로 비동기 처리를 해주고, axios를 기다리게 함
   getMovies = async() => {
     const {data: {data :{movies}}} = await axios.get("https://yts-proxy.now.sh/list_movies.json?sort_by=rating");
-    this.setState({ movies, isLoading: false });
+    this.setState({ movies, isLoading: false});
   }
   componentDidMount() {
     this.getMovies();
@@ -19,23 +20,27 @@ class App extends React.Component {
   render() {
     const { isLoading, movies } = this.state;
     return (
-      <section class="container">
+      <section className="container">
         {isLoading ? (
-            <div class="loader">
-              <span class="loader__text">Loading...</span>
+            <div className="loader">
+              <span className="loader__text">Loading...</span>
             </div>
           ) : (
-            movies.map(movie => (
-            <Movie
-              key={movie.id}
-              id={movie.id}
-              year={movie.year}
-              title={movie.title}
-              summary={movie.summary}
-              poster={movie.medium_cover_image}
-            />
-          )
-          )
+            <div className="movies">
+              {
+                movies.map(movie => (
+                <Movie
+                  key={movie.id}
+                  id={movie.id}
+                  year={movie.year}
+                  title={movie.title}
+                  summary={movie.summary}
+                  poster={movie.medium_cover_image}
+                  genres={movie.genres}
+                />
+              )
+              )}
+            </div>
         )}
       </section>
     );
